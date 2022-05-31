@@ -23,14 +23,14 @@ const createWindow = (): void => {
     height: 600,
     width: 800,
     webPreferences: {
-        nodeIntegration: true, // is default value after Electron v5
-        contextIsolation: false, // protect against prototype pollution
+        nodeIntegration: true,
+        contextIsolation: false, 
       }
   });
 
   // hold on to BrowserWindow
   win = mainWindow;
-
+  
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
@@ -38,20 +38,10 @@ const createWindow = (): void => {
   //mainWindow.webContents.openDevTools();
 };
 
-ipcMain.on('foo', (ev, msg) => {
+ipcMain.on('fetch-app-info', (ev,msg) => {
   switch (msg) {
-    case 'bar': 
-
-      // open README and write to it
-      const content = Date.now().toString() + "\n";
-
-      fs.appendFile(__dirname + '/../../../../../../README.md', content, err => {
-        if (err) {
-          console.error(err);
-        }
-      });
-
-      break;
+    case 'appPath':
+      ev.sender.send('fetch-app-info-reply', app.getAppPath());
   }
 });
 

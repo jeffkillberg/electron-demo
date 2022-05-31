@@ -12,5 +12,5 @@ module.exports = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
 
   },
-  //target: "electron-main",
+  target: "electron-main",
 };
