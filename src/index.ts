@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 
 import path from 'path';
 import fs from 'fs';
@@ -42,8 +42,18 @@ ipcMain.on('fetch-app-info', (ev,msg) => {
   switch (msg) {
     case 'appPath':
       ev.sender.send('fetch-app-info-reply', app.getAppPath());
-  }
+    case 'exe':
+      ev.sender.send('fetch-app-info-reply-exe', app.getPath('exe'));
+    }
 });
+
+ipcMain.on('select-dirs', async (event, arg) => {
+  const result = await dialog.showOpenDialog(win, {
+    properties: ['openDirectory']
+  })
+  //console.log('directories selected', result.filePaths)
+  event.sender.send('select-dirs-reply', result.filePaths);
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
